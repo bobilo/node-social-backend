@@ -76,7 +76,7 @@ router.put("/:id/comment", async(req, res) => {
     try {
         const post = await Post.findById(req.params.id);
             const comment = {};
-            comment[req.body.userId] = req.body.comment;
+            comment[req.body.username] = req.body.comment;
             await post.updateOne({ $push: { comments: comment } });
             res.status(200).json("Comment have been posted");
 
