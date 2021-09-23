@@ -82,6 +82,27 @@ router.get("/friends/:userId", async(req, res) => {
     }
 })
 
+// get birthday friends
+router.get("/birthdayfriends/:userId", async(req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        const friends = await Promise.all(
+            user.followings.map((friendId) => {
+                return User.findById(friendId);
+            })
+        );
+        let friendList = [];
+        friends.map((friend) => {
+            const { _id, username, dob, profilePicture } = friend;
+            friendList.push({ _id, username, dob, profilePicture });
+        });
+        res.status(200).json(friendList);
+
+    } catch(err) {
+        res.status(500).json(err);
+    }
+})
+
 //follow user
 router.put("/:id/follow", async(req, res) => {
     if(req.body.userId !== req.params.id) {
