@@ -97,6 +97,37 @@ router.get("/:id", async(req, res) => {
     }
 })
 
+// post on friend's timeline
+router.post("/timeline", async(req, res) => {
+    try {
+        const currentUser = await User.findById(req.body.friendUserId);
+        const friend = await User.findById(req.body.userId);
+
+        if(currentUser.followings.includes(friend._id) && currentUser.followers.includes(friend._id)) {
+            const newPost = new Post(req.body)
+            try {
+                const savedPost = await newPost.save();
+                res.status(200).json(savedPost);
+        
+            } catch(err) {
+                res.status(500).json(err);
+            }
+        }
+    } catch(err) {
+        res.status(500).json(err);
+    }
+})
+// get all posts
+router.get("/", async(req, res) => {
+    try {
+       const allPosts = await Post.find({});
+       res.status(200).json(allPosts);
+
+    } catch(err) {
+        res.status(500).json(err);
+    }
+})
+
 //get timeline posts
 router.get("/timeline/:userId", async(req, res) => {
     try {
@@ -119,7 +150,15 @@ router.get("/profile/:username", async(req, res) => {
     try {
          const user = await User.findOne({username:req.params.username});
          const posts = await Post.find({userId:user._id});
-         res.status(200).json(posts);
+         const allPosts = await Post.find({});
+         const friendsPosts = await Promise.all(
+            allPosts.map((post) => {
+                if(post.friendUserId == user._id){
+                    return Post.find({ userId: post.userId }); 
+                }
+             })
+         )
+         res.status(200).json(posts.concat(...friendsPosts));
 
     } catch(err) {
         res.status(500).json(err);
