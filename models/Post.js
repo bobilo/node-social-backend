@@ -9,6 +9,10 @@ const PostSchema = new mongoose.Schema({
         type: String,
         default: null,
     },
+    friendUserName: {
+        type: String,
+        default: "",
+    },
     desc: {
         type: String,
         max: 500
