@@ -158,8 +158,10 @@ router.get("/profile/:username", async(req, res) => {
                 }
              })
          )
-         const profilePosts = posts.concat(...friendsPosts);
-         res.status(200).json(profilePosts.filter(Boolean));
+         const newFriendsPosts = friendsPosts.filter(Boolean)[0]
+         const filteredPosts = newFriendsPosts.filter(post => post.friendUserId != null);
+         const profilePosts = posts.concat(...filteredPosts);
+         res.status(200).json(profilePosts);
 
     } catch(err) {
         res.status(500).json(err);

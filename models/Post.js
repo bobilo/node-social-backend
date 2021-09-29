@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema({
     },
     friendUserId : {
         type: String,
-        default: "",
+        default: null,
     },
     desc: {
         type: String,
