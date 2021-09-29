@@ -158,11 +158,16 @@ router.get("/profile/:username", async(req, res) => {
                 }
              })
          )
-         const newFriendsPosts = friendsPosts.filter(Boolean)[0]
-         const filteredPosts = newFriendsPosts.filter(post => post.friendUserId != null);
-         const profilePosts = posts.concat(...filteredPosts);
-         res.status(200).json(profilePosts);
-
+         if(friendsPosts.join(',').replace(/,/g, '').length === 0) {
+            res.status(200).json(posts);
+            
+           } else {
+            const newFriendsPosts = friendsPosts.filter(Boolean)[0]
+            const filteredPosts = newFriendsPosts.filter(post => post.friendUserId != null);
+            const profilePosts = posts.concat(...filteredPosts);
+            res.status(200).json(profilePosts);
+         }
+         
     } catch(err) {
         res.status(500).json(err);
     }
