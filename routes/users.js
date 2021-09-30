@@ -104,8 +104,8 @@ router.get("/birthdayfriends/:userId", async(req, res) => {
         );
         let friendList = [];
         friends.map((friend) => {
-            const { _id, username, dob, gender, isOnline, profilePicture } = friend;
-            friendList.push({ _id, username, dob, gender, isOnline, profilePicture });
+            const { _id, username, dob, gender, isOnline, followers, profilePicture } = friend;
+            friendList.push({ _id, username, dob, gender, isOnline, followers, profilePicture });
         });
         res.status(200).json(friendList);
 
