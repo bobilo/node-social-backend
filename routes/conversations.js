@@ -16,6 +16,17 @@ router.post("/", async (req, res) => {
     }
 })
 
+// get all convos
+router.get("/", async(req, res) => {
+    try {
+       const allConvos = await Conversation.find({});
+       res.status(200).json(allConvos);
+
+    } catch(err) {
+        res.status(500).json(err);
+    }
+})
+
 // get conv of a user
 router.get("/:userId", async (req, res) => {
     try {
